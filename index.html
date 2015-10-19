@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>硕鼠宝</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+	<link rel="stylesheet" href="http://sta.youayou.com/h5/css/base.css">
+	<link rel="stylesheet" href="css/base.css">
+	<script src="js/jquery.js"></script>
+</head>
+<body>
+
+<style>
+/*ui-alert*/
+.ui-alert{position: fixed;z-index: 1000;width: 100%;height: 100%;top: 0;left: 0;background: rgba(0, 0, 0, 0.6);display: none;}
+.ui-alert .box{position: absolute;left: 50%;top: 50%;transform:translate(-50%, -50%);width: 80%;min-width: 300px;max-width: 800px;border-radius:3px;background-color: #fff;text-align: center;}
+.ui-alert .hd{line-height: 50px;font-size: 16px;padding: 0 20px;}
+.ui-alert .bd{line-height: 20px;padding: 0 20px 20px;color: #888;}
+.ui-alert .ft{line-height: 39px;border-top: 1px solid #ddd;color: #0BB20C;}
+/*ui-confirm*/
+.ui-confirm{position: fixed;z-index: 1000;width: 100%;height: 100%;top: 0;left: 0;background: rgba(0, 0, 0, 0.6);display: none;}
+.ui-confirm .box{position: absolute;left: 50%;top: 50%;transform:translate(-50%, -50%);width: 80%;min-width: 300px;max-width: 800px;border-radius:3px;background-color: #fff;}
+.ui-confirm .hd{line-height: 50px;font-size: 16px;padding: 0 20px;}
+.ui-confirm .bd{line-height: 20px;padding: 0 20px 20px;color: #888;}
+.ui-confirm .ft{line-height: 39px;border-top: 1px solid #ddd;text-align: center;display: table;width: 100%;}
+.ui-confirm .btn{display: table-cell;}
+.ui-confirm .btn:last-child{color: #0BB20C;border-left: 1px solid #ddd;}
+</style>
+<!-- 
+<div class="ui-alert">
+	<div class="box">
+		<div class="hd">弹窗标题</div>
+		<div class="bd">弹窗内容，告知当前页面信息等</div>
+		<div class="ft">
+			<div class="btn">确定</div>
+		</div>
+	</div>
+</div>
+ -->
+<!-- 
+<div class="ui-confirm">
+	<div class="box">
+		<div class="hd">弹窗标题</div>
+		<div class="bd">自定义弹窗内容...</div>
+		<div class="ft">
+			<div class="btn">取消</div>
+			<div class="btn">确定</div>
+		</div>
+	</div>
+</div>
+ -->
+
+<style>
+.ui-tip{position: fixed;top: 0;right: 0;bottom: 0;left: 0;background-color: rgba(0,0,0,0);z-index: 1000;}
+.ui-tip .box{position: absolute;left: 50%;top: 50%;width: 120px;transform:translate(-50%, -50%);background-color: rgba(40, 40, 40, 0.75);text-align: center;border-radius: 3px;color: #fff;}
+.ui-tip .icon{font-size: 30px;height: 60px;line-height: 45px;padding-top: 15px;}
+.ui-tip .icon:empty{display: none;}
+.ui-tip .icon *{font-size: 30px;display: block;}
+.ui-tip .txt{line-height: 20px;padding: 10px;}
+</style>
+<!-- 
+<div class="ui-tip">
+	<div class="box">
+		<div class="icon"></div>
+		<div class="txt">正在加载</div>
+	</div>
+</div>
+ -->
+
+
+<script>
+(function ($) {
+    $.extend({
+    	alert: function(options) {
+    		var defaults = {
+			        tit: '提示',
+			        btn: ['确定']
+			    },
+		    	settings = $.extend(defaults, options),
+		    	str;
+			str = '<div class="ui-alert">'+
+					'<div class="box">'+
+						'<div class="hd">' + settings.tit + '</div>'+
+						'<div class="bd">' + settings.txt + '</div>'+
+						'<div class="ft">'+
+							'<div class="btn">' + settings.btn[0] + '</div>'+
+						'</div>'+
+					'</div>'+
+				'</div>';
+			if($('.ui-alert').length) {
+				$('.ui-alert').remove();
+			}
+			$(str).appendTo('body').show();
+			$('.ui-alert .btn').click(function() {
+				var index = $(this).index();
+				settings.callback && settings.callback(index);
+				$('.ui-alert').remove();
+			});
+    	},
+    	confirm: function(options) {
+    		var defaults = {
+			        tit: '提示',
+			        btn: ['取消', '确定'],
+			    },
+		    	settings = $.extend(defaults, options),
+		    	str;
+			str = '<div class="ui-confirm">'+
+					'<div class="box">'+
+						'<div class="hd">' + settings.tit + '</div>'+
+						'<div class="bd">' + settings.txt + '</div>'+
+						'<div class="ft">'+
+							'<div class="btn">' + settings.btn[0] + '</div>'+
+							'<div class="btn">' + settings.btn[1] + '</div>'+
+						'</div>'+
+					'</div>'+
+				'</div>';
+			if($('.ui-confirm').length) {
+				$('.ui-confirm').remove();
+			}
+			$(str).appendTo('body').show();
+			$('.ui-confirm .btn').click(function() {
+				var index = $(this).index();
+				settings.callback && settings.callback(index);
+				$('.ui-confirm').remove();
+			});
+    	},
+    	tip: function(options) {
+    		var defaults = {
+			        icon: '',
+			        autoClose: false,
+			        long: false,
+			        direction: 'center',
+			        duration: 3000
+			    },
+		    	settings = $.extend(defaults, options),
+		    	str;
+			str = '<div class="ui-tip">'+
+					'<div class="box">'+
+						'<div class="icon">' + settings.icon + '</div>'+
+						'<div class="txt">' + settings.txt + '</div>'+
+					'</div>'+
+				'</div>';
+			if($('.ui-tip').length) {
+				$('.ui-tip').remove();
+			}
+			$(str).appendTo('body').show();
+			if(settings.autoClose) {
+				setTimeout(function() {
+					$('.ui-tip').remove();
+				}, settings.duration);
+			}
+			if(settings.direction === 'bottom') {
+				$('.ui-tip .box').css({
+					top: 'auto',
+					bottom: 10
+				});
+			}
+			if(settings.long) {
+				$('.ui-tip .box').width('80%')
+			}
+    	}
+    });
+})(jQuery);
+</script>
+
+
+<div class="alert">
+	<button>alert('hello')</button>
+	<button>alert('world')</button>
+</div>
+
+<div class="confirm">
+	<button>confirm('删除')</button>
+	<button>confirm('隐藏')</button>
+</div>
+
+<div class="tip">
+	<button>删除</button>
+	<button>加载更多</button>
+</div>
+
+<script>
+
+$('.alert').on('click', 'button', function() {
+	var This = this;
+	$.alert({
+		txt: $(This).text(),
+		callback: function(i) {
+			console.log('您点击了第' + i + '个按钮');
+		}
+	})
+});
+
+$('.confirm').on('click', 'button', function() {
+	var This = this;
+	$.confirm({
+		txt: $(This).text(),
+		callback: function(i) {
+			console.log('您点击了第' + i + '个按钮');
+			$.alert({
+				txt: '删除成功！',
+				/*callback: function(i) {
+					console.log('您点击了第' + i + '个按钮');
+				}*/
+			})
+		}
+	})
+});
+
+$('.tip button').first().click(function() {
+	$.tip({
+		txt: '正在请求数据',
+		icon: '<span class="iconfont icon-weixinzhifu"></span>',
+		long: true
+	})
+});
+
+$('.tip button').last().click(function() {
+	$.tip({
+		txt: '加载中~',
+		autoClose: true,
+		direction: 'bottom',
+		icon: '<span class="iconfont icon-qq"></span>'
+	})
+});
+
+</script>
+
+
+
+</body>
+</html>
