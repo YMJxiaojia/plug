@@ -11,7 +11,7 @@ $.extend({
 	    },
     	settings = $.extend(defaults, options),
     	str;
-		str = '<div class="ui-alert ' + (settings.class || '') + '">'+
+		str = '<div class="ui-alert ' + settings.class + '">'+
 				'<div class="box">'+
 					'<div class="hd">' + settings.tit + '</div>'+
 					'<div class="bd">' + settings.txt + '</div>'+
@@ -38,7 +38,7 @@ $.extend({
 	    },
     	settings = $.extend(defaults, options),
     	str;
-		str = '<div class="ui-confirm ' + (settings.class || '') + '">'+
+		str = '<div class="ui-confirm ' + settings.class + '">'+
 				'<div class="box">'+
 					'<div class="hd">' + settings.tit + '</div>'+
 					'<div class="bd">' + settings.txt + '</div>'+
@@ -62,13 +62,13 @@ $.extend({
 	        icon: '',
 	        class: '',
 	        autoClose: false,
-	        direction: 'center',
+	        position: 'bottom',
 	        duration: 3000
 	    },
     	settings = $.extend(defaults, options),
     	str;
-		str = '<div class="ui-tip ' + (settings.class || '') + '">'+
-				'<div class="box">'+
+		str = '<div class="ui-tip ' + settings.class + '">'+
+				'<div class="box ' + settings.position + '">'+
 					(settings.icon ? '<div class="icon">' + settings.icon + '</div>' : '')+
 					'<div class="txt">' + settings.txt + '</div>'+
 				'</div>'+
@@ -80,13 +80,35 @@ $.extend({
 				$('.ui-tip').remove();
 			}, settings.duration);
 		}
-		if(settings.direction === 'bottom') {
-			$('.ui-tip .box').css({
-				top: 'auto',
-				bottom: 10
-			});
-		}
 		return $('.ui-alert');
+	},
+	actions: function(options) {
+		var defaults = {
+			options: [],
+			class: '',
+			position: 'bottom',
+	        callback: function() {}
+	    },
+    	settings = $.extend(defaults, options),
+    	str;
+		str = '<div class="ui-actions "' + settings.class + '>'+
+				'<div class="box ' + settings.position + '">'+
+					'<div class="bd">';
+						$.each(settings.options, function(i, v) {
+							str += '<div class="item">' + v + '</div>';
+						});
+				str += '</div>'+
+					(settings.position === 'middle' ? '' : '<div class="ft">取消</div>')+
+				'</div>'+
+			'</div>';
+		$(str).appendTo('body').show();
+		$('.ui-actions .item').click(function() {
+			var index = $(this).index();
+			settings.callback(index);
+		});
+		$('.ui-actions').click(function(e) {
+			$(this).remove();
+		});
 	}
 });
 

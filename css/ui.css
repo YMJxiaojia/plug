@@ -14,8 +14,18 @@
 .ui-confirm .btn:last-child{color: #0BB20C;border-left: 1px solid #ddd;}
 /*ui-tip*/
 .ui-tip{position: fixed;top: 0;right: 0;bottom: 0;left: 0;background-color: rgba(0,0,0,0);z-index: 1000;}
-.ui-tip .box{position: absolute;left: 50%;top: 50%;width: 80%;min-width: 300px;max-width: 800px;transform:translate(-50%, -50%);background-color: rgba(40, 40, 40, 0.75);text-align: center;border-radius: 3px;color: #fff;}
+.ui-tip .box{position: absolute;left: 50%;width: 80%;min-width: 300px;max-width: 800px;background-color: rgba(40, 40, 40, 0.75);text-align: center;border-radius: 3px;color: #fff;}
+.ui-tip .bottom{bottom: 10px;transform:translateX(-50%);}
+.ui-tip .middle{top: 50%;transform:translate(-50%,-50%);}
 .ui-tip .icon{font-size: 30px;padding-top: 15px;}
 .ui-tip .icon:empty{display: none;}
 .ui-tip .icon *{font-size: 30px;line-height: 45px;display: block;}
 .ui-tip .txt{line-height: 20px;padding: 10px;}
+/*ui-actions*/
+.ui-actions{position: fixed;top: 0;right: 0;bottom: 0;left: 0;background-color: rgba(0,0,0,.6);z-index: 1000;display: none;}
+.ui-actions .box{position: absolute;left: 0;width: 100%;padding: 0 10px;text-align: center;line-height: 40px;color: #007aff;}
+.ui-actions .bottom{bottom: 0;}
+.ui-actions .middle{top: 50%;transform:translateY(-50%);}
+.ui-actions .bd{border-radius: 3px;background-color: #fff;}
+.ui-actions .item:not(:first-child){border-top: 1px solid #ddd;}
+.ui-actions .ft{background-color: #fff;border-radius: 3px;margin: 10px 0;font-weight: 700;}
