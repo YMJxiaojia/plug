@@ -82,7 +82,7 @@ $.extend({
 		}
 		return $('.ui-alert');
 	},
-	actions: function(options) {
+	actionsheet: function(options) {
 		var defaults = {
 			options: [],
 			class: '',
@@ -91,7 +91,7 @@ $.extend({
 	    },
     	settings = $.extend(defaults, options),
     	str;
-		str = '<div class="ui-actions "' + settings.class + '>'+
+		str = '<div class="ui-actionsheet "' + settings.class + '>'+
 				'<div class="box ' + settings.position + '">'+
 					'<div class="bd">';
 						$.each(settings.options, function(i, v) {
@@ -102,14 +102,17 @@ $.extend({
 				'</div>'+
 			'</div>';
 		$(str).appendTo('body').show();
-		$('.ui-actions .item').click(function() {
+		$('.ui-actionsheet .item').click(function() {
 			var index = $(this).index();
 			settings.callback(index);
 		});
-		$('.ui-actions').click(function(e) {
+		$('.ui-actionsheet').click(function(e) {
 			$(this).remove();
 		});
 	}
 });
+
+
+
 
 })(jQuery);

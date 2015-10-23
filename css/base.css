@@ -118,6 +118,11 @@ button {
     color: #333;
 }
 
-body > div:not(:first-child):not(:last-child){
+body > .demo:not(:first-child):not(:last-child){
     margin-top: 10px;
 }
+
+.demo{margin: 10px;}
+.demo .hd{line-height: 30px;padding: 0 10px;border-left: 2px solid orange;}
+.demo .bd{padding: 10px;}
+
