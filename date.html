@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+<link rel="stylesheet" href="http://sta.youayou.com/h5/css/base.css">
+<link rel="stylesheet" href="css/base.css">
+<script src="js/jquery.js"></script>
+</head>
+<body>
+
+<button id="pickdate-birth">选择日期</button>
+
+
+<style>
+.ui-date{position: fixed;top: 0;right: 0;bottom: 0;left: 0;background-color: rgba(0,0,0,.5);z-index: 101;}
+.ui-date .box{position: absolute;left: 0;width: 100%;bottom: 0;background-color: #fff;}
+.ui-date .hd{height: 50px;line-height: 49px;border-bottom: 1px solid #ddd;color: #007aff;}
+.ui-date .btn:first-child{float: left;padding: 0 15px;}
+.ui-date .btn:last-child{float: right;padding: 0 15px;}
+.ui-date .bd{height: 200px;line-height: 40px;overflow: hidden;text-align: center;}
+.ui-date .item{
+	float: left;height: 100%;width: 33.33%;position: relative;
+}
+.ui-date ul{
+	position: relative;
+	z-index: 3;
+}
+.ui-date li{
+	padding: 0 10px;
+}
+.ui-date li.active{
+	color: #df5600;
+}
+.ui-date .marsk{
+	content: "";
+	position: absolute;
+	top: 0;left: 0;
+	z-index: 4;
+	width: 100%;height: 100%;
+	background: linear-gradient(#fff 0,rgba(245,245,245,0) 52%,rgba(245,245,245,0) 48%,#fff 100%);
+	background: -webkit-linear-gradient(#fff 0,rgba(245,245,245,0) 52%,rgba(245,245,245,0) 48%,#fff 100%);
+}
+.ui-date .marsk:before{
+	content: "";
+	width: 100%;
+	height: 40px;
+	position: absolute;
+	top: 80px;left: 0;
+	border-top: #dfdfdf 1px solid;
+	border-bottom: #dfdfdf 1px solid
+}
+.ui-date .marsk:after{
+	content: "年";
+	color: #df5600;
+	position: absolute;
+	top: 80px;
+	right: 10px;
+	font-size: 10px;
+}
+</style>
+
+
+
+<script>
+(function ($) {
+
+$.fn.extend({
+	date: function(options) {
+		var defaults = {
+	        data: [
+	        	{start: 1980,end: 2015},
+	        	{start: 1,end: 12},
+	        	{start: 1,end: 31}
+	        ],
+	        init: [1990, 12, 29],
+	        suffix: [],
+	        callback: function() {}
+	    },
+		settings = $.extend(defaults, options),
+		str,
+		iTop0,
+		iTop1,
+		iTop2,
+		iTop,
+		iNow;
+		str = '<div class="ui-date">'+
+				'<div class="box">'+
+					'<div class="hd">'+
+						'<span class="btn">取消</span>'+
+						'<span class="btn">确定</span>'+
+					'</div>'+
+					'<div class="bd">';
+			$.each(settings.data, function(i) {
+				str +=  '<div class="item">' + 
+							'<ul>';
+					for(var j = settings.data[i].start; j <= settings.data[i].end; j++) {
+						str += '<li>' + j + '</li>';
+					}
+					 str += '</ul>'+
+					 		'<div class="marsk"></div>'+
+						'</div>';
+			});
+			str +=  '</div>'+
+				'</div>'+
+			'</div>';
+		$('body').append(str);
+
+		$('.ui-date .item').on('touchstart', function(e) {
+			console.log('开始了');
+			var $ul = $(this).find('ul'),
+				touchs=e.originalEvent.changedTouches[0];
+			iTop0=parseFloat($ul.css('-webkit-transform').split(',')[$ul.css('-webkit-transform').split(',').length-1])||0;
+			iTop1=touchs.pageY;
+
+			$(document).on('touchmove', function(e) {
+				var touchs=e.originalEvent.changedTouches[0];
+				iTop2=touchs.pageY;
+				iTop=iTop0 + iTop2 - iTop1;
+				iTop=Math.min(iTop,140);
+				iTop=Math.max(iTop,-$ul.height()+40);
+				$ul.css({
+					"transition": "0ms cubic-bezier(0.1, 0.57, 0.1, 1)",
+					"-webkit-transform": "matrix(1,0,0,1,0,"+iTop+")"
+				});
+				// return false;
+			});
+
+			$(document).on('touchend', function(e) {
+				$(document).off('touchmove touchend');
+				iTop=(iTop>0?1:-1)*(Math.floor(Math.abs(iTop)/40)*40+(Math.abs(iTop)-Math.floor(Math.abs(iTop)/40)*40>25?40:0));
+				iTop=Math.min(iTop,40*2);
+				iTop=Math.max(iTop,-$ul.height()+40*3);
+				$ul.css({
+					"transition": "200ms cubic-bezier(0.1, 0.57, 0.1, 1)",
+					"-webkit-transform": "matrix(1,0,0,1,0,"+iTop+")"
+				});
+				iTop0=iTop;
+				iNow=(40*3-iTop)/40-1;
+				$ul.children('li').removeClass('active').eq(iNow).addClass('active');
+			});
+		});
+
+	}
+});
+
+})(jQuery);
+</script>
+
+<script>
+
+$('#pickdate-birth').click(function() {
+	$(this).date({
+		data: [
+			{start: 1990, end: 2015},
+			{start: 1, end: 12},
+			{start: 1, end: 31},
+		],
+		suffix: ['年', '月', '日']
+	})
+}).click();
+
+</script>
+
+
+</body>
+</html>
