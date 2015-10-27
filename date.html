@@ -51,8 +51,7 @@
 	border-top: #dfdfdf 1px solid;
 	border-bottom: #dfdfdf 1px solid
 }
-.ui-date .marsk:after{
-	content: "年";
+.ui-date .suffix{
 	color: #df5600;
 	position: absolute;
 	top: 80px;
@@ -75,6 +74,7 @@ $.fn.extend({
 	        	{start: 1,end: 31}
 	        ],
 	        init: [1990, 12, 29],
+	        ret: [-1, -1, -1],
 	        suffix: [],
 	        callback: function() {}
 	    },
@@ -99,7 +99,7 @@ $.fn.extend({
 						str += '<li>' + j + '</li>';
 					}
 					 str += '</ul>'+
-					 		'<div class="marsk"></div>'+
+					 		'<div class="marsk"><div class="suffix">' + settings.suffix[i] + '</div></div>'+
 						'</div>';
 			});
 			str +=  '</div>'+
@@ -108,7 +108,6 @@ $.fn.extend({
 		$('body').append(str);
 
 		$('.ui-date .item').on('touchstart', function(e) {
-			console.log('开始了');
 			var $ul = $(this).find('ul'),
 				touchs=e.originalEvent.changedTouches[0];
 			iTop0=parseFloat($ul.css('-webkit-transform').split(',')[$ul.css('-webkit-transform').split(',').length-1])||0;
@@ -139,7 +138,14 @@ $.fn.extend({
 				iTop0=iTop;
 				iNow=(40*3-iTop)/40-1;
 				$ul.children('li').removeClass('active').eq(iNow).addClass('active');
+				settings.ret[$ul.parent('.item').index()] = iNow;
 			});
+		});
+		$('.ui-date, .ui-date .btn').click(function(e) {
+			e.target === this && $('.ui-date').remove();
+		});
+		$('.ui-date .btn:last-child').click(function() {
+			settings.callback(settings.ret);
 		});
 
 	}
@@ -157,9 +163,14 @@ $('#pickdate-birth').click(function() {
 			{start: 1, end: 12},
 			{start: 1, end: 31},
 		],
-		suffix: ['年', '月', '日']
+		init: [],
+		suffix: ['年', '月', '日'],
+		callback: function(data) {
+			console.log(data);
+		}
 	})
-}).click();
+});
+
 
 </script>
 
