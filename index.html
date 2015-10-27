@@ -137,14 +137,15 @@ $('.actionsheet button').eq(1).click(function() {
 .ui-tab .item-hd.active{
 	border-bottom-color: #00a5e0;
 }
-.ui-tab .bd{line-height: 25px;width: 300%;}
-.ui-tab .item-bd{width: 33.33%;float: left;}
+.ui-tab .bd{line-height: 25px;}
+.ui-tab .item-bd:not(:first-child){display: none;}
+.ui-tab .item-bd.active{display: block;}
 .ui-tab .item-bd:nth-of-type(1){color: red;}
 .ui-tab .item-bd:nth-of-type(2){color: orange;}
 .ui-tab .item-bd:nth-of-type(3){color: purple;}
 </style>
 
-<div class="ui-tab">
+<div class="ui-tab" id="tab1">
 	<div class="hd">
 		<div class="item-hd active">热门推荐</div>
 		<div class="item-hd">全部表情</div>
@@ -165,31 +166,65 @@ $('.actionsheet button').eq(1).click(function() {
 				<li>CSDN特别制作的“2013，中国云计算大势”专题中荣登国内靠谱云存储榜单</li>
 				<li>荣获“2012中国十家云创新实践企业”</li>
 				<li>荣获中国企业家“2013未来之星萌芽榜”</li>
+				<li>荣获中国企业家“2013未来之星萌芽榜”</li>
+				<li>荣获中国企业家“2013未来之星萌芽榜”</li>
 			</ul>
 		</div>
 	</div>
 </div>
 
+<div class="ui-tab" id="tab2">
+	<div class="hd">
+		<div class="item-hd active">热门推荐</div>
+		<div class="item-hd">全部表情</div>
+		<div class="item-hd">表情</div>
+	</div>
+	<div class="bd">
+		<div class="item-bd">
+			<p>七牛，是一家云存储初创企业，由国内存储行业的领军人物之一许式伟于2011年创立。团队核心成员主要来自盛大、金山、网龙、惠普等知名互联网公司，核心成员之间已合作多年。</p>
+			<p>七牛采用全分布式存储架构，可以解决单一数据中心架构可能存在的风险。和传统的云存储服务不同，七牛还增加了上传下载全网加速以及图片、音视频的处理服务。</p>
+		</div>
+		<div class="item-bd">
+			<p>七牛云存储主要托管企业的静态资源，为企业提供一站式在线数据托管、上传下载全网加速、以及数据云端处理服务。主要做静态文件，包括富媒体一体化解决方案，解决富媒体存储、上传下载加速、数据处理，包括图片处理、音视频处理，比如说做缩略图，打水印。[1] </p>
+			<p>此外，七牛还提供了镜像存储、客户端直传以及断点续上传等功能，方便开发者的使用。</p>
+		</div>
+		<div class="item-bd">
+			<ul>
+				<li>荣获中国云计算应用联盟颁发的“2013年最佳云存储服务奖”</li>
+				<li>CSDN特别制作的“2013，中国云计算大势”专题中荣登国内靠谱云存储榜单</li>
+				<li>荣获“2012中国十家云创新实践企业”</li>
+				<li>荣获中国企业家“2013未来之星萌芽榜”</li>
+				<li>荣获中国企业家“2013未来之星萌芽榜”</li>
+				<li>荣获中国企业家“2013未来之星萌芽榜”</li>
+			</ul>
+		</div>
+	</div>
+</div>
 
 <script>
 (function ($) {
 
 $.fn.extend({
 	tab: function() {
-		this.each(function() {
-			/*var aHd = this.find('.item-hd'),
-				aBd = this.find('.item-bd'),
-				len = aHd.length;
-			aHd.click(function() {
-				console.log($(this).index());
-			});*/
+		var aHd = this.find('.item-hd'),
+			aBd = this.find('.item-bd'),
+			len = aHd.length;
+			bFirst = false,
+		aHd.click(function() {
+			var i = $(this).index()
+			$(aHd).removeClass('active').eq(i).addClass('active');
+			$(aBd).hide().eq(i).show();
+
+			bFirst = true;
 		});
+		
 	}
 });
 
 })(jQuery);
 
-$('.ui-tab').tab()
+$('#tab1').tab()
+$('#tab2').tab()
 
 </script>
 
