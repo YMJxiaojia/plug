@@ -10,9 +10,6 @@
 </head>
 <body>
 
-<button id="pickdate-birth">选择日期</button>
-
-
 <style>
 .ui-date{position: fixed;top: 0;right: 0;bottom: 0;left: 0;background-color: rgba(0,0,0,.5);z-index: 101;}
 .ui-date .box{position: absolute;left: 0;width: 100%;bottom: 0;background-color: #fff;}
@@ -123,7 +120,7 @@ $.fn.extend({
 					"transition": "0ms cubic-bezier(0.1, 0.57, 0.1, 1)",
 					"-webkit-transform": "matrix(1,0,0,1,0,"+iTop+")"
 				});
-				return false;
+				e.preventDefault();
 			});
 
 			$(document).on('touchend', function(e) {
@@ -154,25 +151,36 @@ $.fn.extend({
 })(jQuery);
 </script>
 
+<div class="demo">
+	<button id="pickdate-birth">选择日期</button>
+	<h1></h1>
+</div>
+
 <script>
 
-$('#pickdate-birth').click(function() {
-	$(this).date({
-		data: [
-			{start: 1990, end: 2015},
-			{start: 1, end: 12},
-			{start: 1, end: 31},
-		],
-		init: [],
-		suffix: ['年', '月', '日'],
-		callback: function(data) {
-			console.log(data);
-		}
-	})
+$(function() {
+	$('#pickdate-birth').click(function() {
+		var This = $(this);
+		console.log(This);
+		$(this).date({
+			data: [
+				{start: 1990, end: 2015},
+				{start: 1, end: 12},
+				{start: 1, end: 31},
+			],
+			init: [],
+			suffix: ['年', '月', '日'],
+			callback: function(data) {
+				This.siblings('h1').text(data)
+			}
+		})
+	});
 });
 
-
 </script>
+
+
+
 
 
 </body>
