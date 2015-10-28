@@ -70,7 +70,7 @@ $.fn.extend({
 	        	{start: 1,end: 12},
 	        	{start: 1,end: 31}
 	        ],
-	        init: [1990, 12, 29],
+	        init: [1995, 5, 9],
 	        ret: [-1, -1, -1],
 	        suffix: [],
 	        callback: function() {}
@@ -81,7 +81,9 @@ $.fn.extend({
 		iTop1,
 		iTop2,
 		iTop,
-		iNow;
+		iNow,
+		iIndex,
+		$ul,
 		str = '<div class="ui-date">'+
 				'<div class="box">'+
 					'<div class="hd">'+
@@ -103,10 +105,19 @@ $.fn.extend({
 				'</div>'+
 			'</div>';
 		$('body').append(str);
-
+		$.each(settings.init, function(i, e) {
+			$ul = $('.ui-date .item').eq(i).find('ul');
+			iNow = settings.init[i] - settings.data[i].start;
+			$ul.find('li').removeClass('active').eq(iNow).addClass('active');
+			$ul.css({
+				"transition": "0ms cubic-bezier(0.1, 0.57, 0.1, 1)",
+				"-webkit-transform": "matrix(1,0,0,1,0," + (-iNow + 2)*40 + ")"
+			});
+		});
 		$('.ui-date .item').on('touchstart', function(e) {
-			var $ul = $(this).find('ul'),
-				touchs=e.originalEvent.changedTouches[0];
+			var	touchs=e.originalEvent.changedTouches[0];
+			$ul = $(this).find('ul');
+			iIndex = $(this).index();
 			iTop0=parseFloat($ul.css('-webkit-transform').split(',')[$ul.css('-webkit-transform').split(',').length-1])||0;
 			iTop1=touchs.pageY;
 
@@ -134,8 +145,8 @@ $.fn.extend({
 				});
 				iTop0=iTop;
 				iNow=(40*3-iTop)/40-1;
-				$ul.children('li').removeClass('active').eq(iNow).addClass('active');
-				settings.ret[$ul.parent('.item').index()] = iNow;
+				$ul.find('li').removeClass('active').eq(iNow).addClass('active');
+				settings.ret[iIndex] = settings.data[iIndex].start + iNow;
 			});
 		});
 		$('.ui-date, .ui-date .btn').click(function(e) {
@@ -161,14 +172,12 @@ $.fn.extend({
 $(function() {
 	$('#pickdate-birth').click(function() {
 		var This = $(this);
-		console.log(This);
 		$(this).date({
 			data: [
 				{start: 1990, end: 2015},
 				{start: 1, end: 12},
 				{start: 1, end: 31},
 			],
-			init: [],
 			suffix: ['年', '月', '日'],
 			callback: function(data) {
 				This.siblings('h1').text(data)
